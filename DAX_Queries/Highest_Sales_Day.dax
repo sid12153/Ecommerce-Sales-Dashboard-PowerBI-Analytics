@@ -1,0 +1,13 @@
+Highest Sales Day = 
+VAR MaxSalesDate = 
+    SELECTCOLUMNS(
+        TOPN(1, 
+            SUMMARIZE(cleaned_ecommerce_data, cleaned_ecommerce_data[Order Date], "Sales", SUM(cleaned_ecommerce_data[Sales])),
+            [Sales], DESC
+        ),
+        "Order Date", cleaned_ecommerce_data[Order Date]
+    )
+VAR MaxSales = 
+    CALCULATE(SUM(cleaned_ecommerce_data[Sales]), cleaned_ecommerce_data[Order Date] = MaxSalesDate)
+RETURN 
+"📅 " & FORMAT(MaxSalesDate, "MMMM dd, yyyy") & " | 💰 $"&FORMAT(MaxSales, "0,0.00")

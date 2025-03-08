@@ -1,0 +1,1 @@
+Number of Orders = DISTINCTCOUNT(cleaned_ecommerce_data[Order ID])

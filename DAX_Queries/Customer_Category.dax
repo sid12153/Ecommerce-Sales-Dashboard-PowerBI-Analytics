@@ -1,0 +1,21 @@
+Customer Category = 
+    VAR OrderCount = 
+        CALCULATE(DISTINCTCOUNT(cleaned_ecommerce_data[Order ID]), 
+                ALLEXCEPT(cleaned_ecommerce_data, cleaned_ecommerce_data[Customer Name]))
+
+    VAR TotalSales = 
+        CALCULATE(SUM(cleaned_ecommerce_data[Sales]), 
+                ALLEXCEPT(cleaned_ecommerce_data, cleaned_ecommerce_data[Customer Name]))
+
+    RETURN 
+    IF(
+        NOT(ISINSCOPE(cleaned_ecommerce_data[Customer Name])), 
+        BLANK(),  -- This prevents a category from appearing in the total row
+        SWITCH(
+            TRUE(),
+            OrderCount >= 8 && TotalSales >= 3644.98, "Frequent Buyer & Big Spender",
+            OrderCount >= 8, "Frequent Buyer",
+            TotalSales >= 3644.98, "Big Spender",
+            "Regular Customer"
+        )
+)
